@@ -50,11 +50,11 @@ class Exploit(exploits.Exploit):
                 if pkt.haslayer(ListIdentityResponse):
                     product_name = pkt[ListIdentityResponse].ProductName
                     device_type = pkt[ListIdentityResponse].DeviceType
-                    if device_type in DEVICE_TYPES.keys():
+                    if device_type in list(DEVICE_TYPES.keys()):
                         device_type = DEVICE_TYPES[device_type]
                     ip_address = pkt[SocketAddress].SinAddress
                     vendor = pkt[ListIdentityResponse].VendorID
-                    if vendor in VENDOR_IDS.keys():
+                    if vendor in list(VENDOR_IDS.keys()):
                         vendor = VENDOR_IDS[vendor]
                     revision = pkt[ListIdentityResponse].Revision
                     revision = struct.pack("!H", revision)

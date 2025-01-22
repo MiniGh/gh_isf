@@ -125,7 +125,7 @@ class icssploitInterpreterTest(icssploitTestCase):
     def test_command_unsetg(self, mock_print_success):
         GLOBAL_OPTS['foo'] = 'bar'
         self.interpreter.command_unsetg('foo')
-        self.assertNotIn('foo', GLOBAL_OPTS.keys())
+        self.assertNotIn('foo', list(GLOBAL_OPTS.keys()))
         mock_print_success.assert_called_once_with({'foo': ''})
 
     @mock.patch('icssploit.utils.print_error')

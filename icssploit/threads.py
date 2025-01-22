@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 
 import threading
 import time
@@ -6,7 +6,7 @@ import time
 try:
     import queue
 except ImportError:
-    import Queue as queue
+    import queue as queue
 
 from . import utils
 from .exceptions import StopThreadPoolExecutor
@@ -50,7 +50,7 @@ class ThreadPoolExecutor(object):
     def __enter__(self):
         workers = []
         data_producing.set()
-        for worker_id in xrange(int(self.threads)):
+        for worker_id in range(int(self.threads)):
             worker = WorkerThread(
                 name='worker-{}'.format(worker_id),
             )

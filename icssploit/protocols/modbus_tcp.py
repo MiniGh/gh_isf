@@ -43,7 +43,7 @@ class ModbusHeaderRequest(Packet):
 
     def guess_payload_class(self, payload):
         try:
-            return modbus_request_classes[self.func_code]
+            return modbus_request_classes[self.__code__]
         except KeyError:
             pass
         return None
@@ -66,11 +66,11 @@ class ModbusHeaderResponse(Packet):
 
     def guess_payload_class(self, payload):
         try:
-            return modbus_response_classes[self.func_code]
+            return modbus_response_classes[self.__code__]
         except KeyError:
             pass
         try:
-            if self.func_code in modbus_error_func_codes.keys():
+            if self.__code__ in list(modbus_error_func_codes.keys()):
                 return GenericError
         except KeyError:
             pass

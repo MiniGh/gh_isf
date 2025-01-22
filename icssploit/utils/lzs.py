@@ -38,7 +38,7 @@ class BitReader:
 
         for byte in bytes:
             byte = ord(byte)
-            for n in xrange(8):
+            for n in range(8):
                 self._bits.append(bool((byte >> (7 - n)) & 1))
 
     def getBit(self):
@@ -46,7 +46,7 @@ class BitReader:
 
     def getBits(self, num):
         res = 0
-        for i in xrange(num):
+        for i in range(num):
             res += self.getBit() << num - 1 - i
         return res
 
@@ -132,7 +132,7 @@ def LZSDecompress(data, window=RingList(2048)):
                         lenCounter += 1
                     lenght = 15 * lenCounter + 8 + lenField
 
-            for i in xrange(lenght):
+            for i in range(lenght):
                 char = window[-offset]
                 result += chr(char)
                 window.append(char)

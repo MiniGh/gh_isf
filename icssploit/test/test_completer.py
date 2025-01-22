@@ -62,7 +62,7 @@ class icssploitCompleterTest(icssploitTestCase):
 
     def test_complete_use_exploits(self):
         self.isf.send("use ex\t\t")
-        print(self.raw_prompt)
+        print((self.raw_prompt))
         self.assertPrompt(
             self.raw_prompt,
             'use exploits/'

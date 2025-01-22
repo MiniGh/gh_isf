@@ -172,7 +172,7 @@ class S7Client(Base):
                     self.logger.info("Already authorized")
                 else:
                     error_code = rsp1[S7PasswordParameterRsp].ErrorCode
-                    if error_code in S7_ERROR_CLASS.keys():
+                    if error_code in list(S7_ERROR_CLASS.keys()):
                         self.logger.error("Got error code: %s" % S7_ERROR_CLASS[error_code])
                     else:
                         self.logger.error("Get error code: %s" % hex(error_code))
@@ -192,7 +192,7 @@ class S7Client(Base):
                 self.logger.info("session cleaned")
             else:
                 error_code = rsp1[S7CleanSessionParameterRsp].ErrorCode
-                if error_code in S7_ERROR_CLASS.keys():
+                if error_code in list(S7_ERROR_CLASS.keys()):
                     self.logger.error("Got error code: %s" % S7_ERROR_CLASS[error_code])
                 else:
                     self.logger.error("Get error code: %s" % hex(error_code))
@@ -324,10 +324,10 @@ class S7Client(Base):
             self.logger.info("Didn't have read privilege on targets")
             return None
         block_data = ''
-        if block_type in S7_BLOCK_TYPE_IN_FILE_NAME.keys():
+        if block_type in list(S7_BLOCK_TYPE_IN_FILE_NAME.keys()):
             file_block_type = block_type
         else:
-            for key, name in S7_BLOCK_TYPE_IN_FILE_NAME.iteritems():
+            for key, name in S7_BLOCK_TYPE_IN_FILE_NAME.items():
                 if name == block_type:
                     file_block_type = key
                     break
@@ -400,7 +400,7 @@ class S7Client(Base):
         mem_length, mc7_length, block_type, block_num = self.get_info_from_block(block_data)
         self.logger.info("Start download %s%s to targets" % (block_type, block_num))
         file_block_type = None
-        for key, name in S7_BLOCK_TYPE_IN_FILE_NAME.iteritems():
+        for key, name in S7_BLOCK_TYPE_IN_FILE_NAME.items():
             if name == block_type:
                 file_block_type = key
                 break
@@ -483,7 +483,7 @@ class S7Client(Base):
         mem_length, mc7_length, block_type, block_num = self.get_info_from_block(block_data)
         self.logger.info("Start download %s%s to targets" % (block_type, block_num))
         file_block_type = None
-        for key, name in S7_BLOCK_TYPE_IN_FILE_NAME.iteritems():
+        for key, name in S7_BLOCK_TYPE_IN_FILE_NAME.items():
             if name == block_type:
                 file_block_type = key
                 break
@@ -593,7 +593,7 @@ class S7Client(Base):
 
     @staticmethod
     def get_transport_size_from_data_type(data_type):
-        for key, name in S7_TRANSPORT_SIZE_IN_PARM_ITEMS.iteritems():
+        for key, name in S7_TRANSPORT_SIZE_IN_PARM_ITEMS.items():
             if isinstance(data_type, str):
                 if name.startswith(data_type.upper()):
                     return key
@@ -613,7 +613,7 @@ class S7Client(Base):
                         area_type = VAR_NAME_TYPES[key]
 
                 elif isinstance(item[0], int):
-                    if item[0] in VAR_NAME_TYPES.keys():
+                    if item[0] in list(VAR_NAME_TYPES.keys()):
                         area_type = item[0]
 
             # Data block
@@ -645,14 +645,14 @@ class S7Client(Base):
         bit_array = ""
         for data in bytes_data:
             bit_array += '{:08b}'.format(ord(data))
-        return map(int, list(bit_array))
+        return list(map(int, list(bit_array)))
 
     def _unpack_data_with_transport_size(self, req_item, rsp_item):
         # ref http://www.plcdev.com/step_7_elementary_data_types
         if isinstance(rsp_item, S7ReadVarDataItemsRsp):
             try:
                 req_type = req_item.TransportSize
-                if req_type not in S7_TRANSPORT_SIZE_IN_PARM_ITEMS.keys():
+                if req_type not in list(S7_TRANSPORT_SIZE_IN_PARM_ITEMS.keys()):
                     return []
                 # BIT (0x01)
                 elif req_type == 0x01:
@@ -661,7 +661,7 @@ class S7Client(Base):
                 # BYTE (0x02)
                 elif req_type == 0x02:
                     byte_list = list(rsp_item.Data)
-                    return map(ord, byte_list)
+                    return list(map(ord, byte_list))
                 # CHAR (0x03)
                 elif req_type == 0x03:
                     char_list = list(rsp_item.Data)
@@ -704,7 +704,7 @@ class S7Client(Base):
         if isinstance(req_item, S7WriteVarItemsReq):
             try:
                 req_type = req_item.TransportSize
-                if req_type not in S7_TRANSPORT_SIZE_IN_PARM_ITEMS.keys():
+                if req_type not in list(S7_TRANSPORT_SIZE_IN_PARM_ITEMS.keys()):
                     return []
                 # BIT (0x01)
                 elif req_type == 0x01:
@@ -753,7 +753,7 @@ class S7Client(Base):
 
     @staticmethod
     def _convert_transport_size_from_parm_to_data(parm_transport_size):
-        if parm_transport_size not in S7_TRANSPORT_SIZE_IN_PARM_ITEMS.keys():
+        if parm_transport_size not in list(S7_TRANSPORT_SIZE_IN_PARM_ITEMS.keys()):
             return None
         else:
             # BIT (0x03)

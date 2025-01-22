@@ -112,7 +112,7 @@ class Exploit(exploits.Exploit):
     def invalid_auth(self):
         for i in range(0, 21, 5):
             url = sanitize_url("{}:{}{}".format(self.target, self.port, self.path))
-            headers = {u'Content-Type': u'application/x-www-form-urlencoded'}
+            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
             user = "A" * i
             password = "A" * i
@@ -159,7 +159,7 @@ class Exploit(exploits.Exploit):
                 attributes = ["name", "id"]
 
                 for atr in attributes:
-                    if atr not in inp.attrs.keys():
+                    if atr not in list(inp.attrs.keys()):
                         continue
 
                     if inp.attrs[atr].lower() in user_name_list and inp.attrs['type'] != "hidden":
@@ -169,7 +169,7 @@ class Exploit(exploits.Exploit):
                         found = True
                         tmp.append(inp.attrs[atr] + "=" + "{{PASS}}")
                     else:
-                        if 'value' in inp.attrs.keys():
+                        if 'value' in list(inp.attrs.keys()):
                             tmp.append(inp.attrs[atr] + "=" + inp.attrs['value'])
                         elif inp.attrs['type'] not in ("submit", "button"):
                             tmp.append(inp.attrs[atr] + "=")
@@ -184,7 +184,7 @@ class Exploit(exploits.Exploit):
         module_verbosity = boolify(self.verbosity)
         name = threading.current_thread().name
         url = sanitize_url("{}:{}{}".format(self.target, self.port, self.path))
-        headers = {u'Content-Type': u'application/x-www-form-urlencoded'}
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
         print_status(name, 'process is starting...', verbose=module_verbosity)
 

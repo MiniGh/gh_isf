@@ -186,7 +186,7 @@ class Wdb2Client(Base):
         address = int(address)
         pkt = RPCReq() / WdbMemWriteReq(Offset=address, Buff=data)
         pkt[RPCReq].Procedure = 0xb
-        print('start writing memory at 0x', struct.pack("!I", address).encode('hex'))
+        print(('start writing memory at 0x', struct.pack("!I", address).encode('hex')))
         return self.send_receive_wdb_packet(pkt)
 
     def write_target_memory(self, address, data):
@@ -206,7 +206,7 @@ class Wdb2Client(Base):
             buff = data[i:i + 4]
             res = self._write_memory(address, buff)
             if res is None:
-                print("can't write memory at 0x", struct.pack("!I", address).encode('hex'))
+                print(("can't write memory at 0x", struct.pack("!I", address).encode('hex')))
                 return
             address += 4
 

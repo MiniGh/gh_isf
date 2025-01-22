@@ -1,5 +1,5 @@
-from __future__ import print_function
-from __future__ import absolute_import
+
+
 
 import threading
 from weakref import WeakKeyDictionary
@@ -7,7 +7,7 @@ from weakref import WeakKeyDictionary
 try:
     import queue
 except ImportError:
-    import Queue as queue
+    import queue as queue
 
 
 printer_queue = queue.Queue()

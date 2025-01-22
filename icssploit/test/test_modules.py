@@ -31,7 +31,7 @@ class ModuleTest(icssploitTestCase):
             "authors",
             "references"
         )
-        self.assertIsSubset(required_metadata, self.module_metadata.keys())
+        self.assertIsSubset(required_metadata, list(self.module_metadata.keys()))
 
     def test_metadata_type(self):
         self.assertIsSequence(self.module_metadata['authors'])

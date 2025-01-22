@@ -162,12 +162,12 @@ class CIPClient(Base):
                     if rsp.haslayer(GetAttributesAll):
                         product_name = rsp[GetAttributesAll].ProductName
                         device_type = rsp[GetAttributesAll].DeviceType
-                        if device_type in DEVICE_TYPES.keys():
+                        if device_type in list(DEVICE_TYPES.keys()):
                             device_type = DEVICE_TYPES[device_type]
                         else:
                             device_type = "%s (%s)" % (product_name, hex(device_type))
                         vendor = rsp[GetAttributesAll].VendorID
-                        if vendor in VENDOR_IDS.keys():
+                        if vendor in list(VENDOR_IDS.keys()):
                             vendor = VENDOR_IDS[vendor]
                         else:
                             vendor = "%s (%s)" % (product_name, hex(vendor))

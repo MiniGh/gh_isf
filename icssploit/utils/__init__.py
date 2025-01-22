@@ -1,5 +1,5 @@
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 
 import collections
 import errno
@@ -52,8 +52,8 @@ def index_modules(modules_directory=MODULES_DIR):
     for root, dirs, files in os.walk(modules_directory):
         _, package, root = root.rpartition('icssploit/modules/'.replace('/', os.sep))
         root = root.replace(os.sep, '.')
-        files = filter(lambda x: not x.startswith("__") and x.endswith('.py'), files)
-        modules.extend(map(lambda x: '.'.join((root, os.path.splitext(x)[0])), files))
+        files = [x for x in files if not x.startswith("__") and x.endswith('.py')]
+        modules.extend(['.'.join((root, os.path.splitext(x)[0])) for x in files])
     return modules
 
 
@@ -64,8 +64,8 @@ def index_extra_modules(modules_directory=MODULES_DIR):
     for root, dirs, files in os.walk(modules_directory):
         _, package, root = root.rpartition('extra_modules/'.replace('/', os.sep))
         root = root.replace(os.sep, '.')
-        files = filter(lambda x: not x.startswith("__") and x.endswith('.py'), files)
-        modules.extend(map(lambda x: '.'.join((root, os.path.splitext(x)[0])), files))
+        files = [x for x in files if not x.startswith("__") and x.endswith('.py')]
+        modules.extend(['.'.join((root, os.path.splitext(x)[0])) for x in files])
     return modules
 
 
@@ -91,7 +91,7 @@ def iter_modules(modules_directory=MODULES_DIR):
     """ Iterate over valid modules """
 
     modules = index_modules(modules_directory)
-    modules = map(lambda x: "".join(['icssploit.modules.', x]), modules)
+    modules = ["".join(['icssploit.modules.', x]) for x in modules]
     for path in modules:
         try:
             yield import_exploit(path)
@@ -281,17 +281,15 @@ class LockedIterator(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         self.lock.acquire()
         try:
-            return self.it.next()
+            return next(self.it)
         finally:
             self.lock.release()
 
 
-class NonStringIterable:
-
-    __metaclass__ = ABCMeta
+class NonStringIterable(metaclass=ABCMeta):
 
     @abstractmethod
     def __iter__(self):
@@ -326,7 +324,7 @@ def print_table(headers, *args, **kwargs):
     header_separator = kwargs.get("header_separator", '-')
     max_column_length = kwargs.get("max_column_length", 60)
 
-    if not all(map(lambda x: len(x) == len(headers), args)):
+    if not all([len(x) == len(headers) for x in args]):
         print_error("Headers and table rows tuples should be the same length.")
         return
 
@@ -363,9 +361,9 @@ def print_table(headers, *args, **kwargs):
         for idx, element in enumerate(arg):
             content_line_data[idx] = str(element)
 
-        while not all(map(lambda x: len(content_line_data[x]) == 0, content_line_data.keys())):
+        while not all([len(content_line_data[x]) == 0 for x in list(content_line_data.keys())]):
             content_line = '   '
-            for idx in content_line_data.keys():
+            for idx in list(content_line_data.keys()):
                 element = content_line_data[idx][:max_column_length]
                 content_line = "".join((
                     content_line,
@@ -416,7 +414,7 @@ def pprint_dict_in_order(dictionary, order=None):
         else:
             print_info(body)
 
-    keys = dictionary.keys()
+    keys = list(dictionary.keys())
     for element in order:
         try:
             key = keys.pop(keys.index(element))
@@ -471,7 +469,7 @@ def boolify(value):
 
     Objects other than string will be transformed using built-in bool() function.
     """
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         try:
             return bool(strtobool(value))
         except ValueError:
@@ -502,7 +500,7 @@ def posix_shell(chan):
             r, w, e = select.select([chan, sys.stdin], [], [])
             if chan in r:
                 try:
-                    x = unicode(chan.recv(1024))
+                    x = str(chan.recv(1024))
                     if len(x) == 0:
                         break
                     sys.stdout.write(x)
@@ -558,7 +556,7 @@ def tokenize(token_specification, text):
     line_start = 0
     for mo in re.finditer(tok_regex, text):
         kind = mo.lastgroup
-        value = filter(lambda x: x is not None, mo.groups())
+        value = [x for x in mo.groups() if x is not None]
         if kind == 'NEWLINE':
             line_start = mo.end()
             line_num += 1

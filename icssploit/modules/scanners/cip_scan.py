@@ -47,7 +47,7 @@ class Exploit(exploits.Exploit):
                 try:
                     product_name, device_type, vendor, revision, serial_number = \
                     target.get_target_info(port_segment=slot_num)
-                    print(product_name, device_type, vendor, revision, serial_number)
+                    print((product_name, device_type, vendor, revision, serial_number))
                     slot = slot_num
                     ip_address = host
                     if serial_number != '':

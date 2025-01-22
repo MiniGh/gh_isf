@@ -78,7 +78,7 @@ class ModbusClient(Base):
             self.logger.error("Please create connect before send packet!")
 
     def send_receive_modbus_packet(self, packet):
-        func_code = packet.func_code
+        func_code = packet.__code__
         if self._connection:
             try:
                 rsp = self._connection.sr1(packet, timeout=self._timeout)

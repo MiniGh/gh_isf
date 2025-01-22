@@ -102,7 +102,7 @@ class Exploit(exploits.Exploit):
                         if i != -1:
                             print_error("Target: {}:{} {}: Authentication Failed - Username: '{}' Password: '{}'".format(self.target, self.port, name, user, password), verbose=module_verbosity)
                         else:
-                            if any(map(lambda x: x in res, ["#", "$", ">"])) or len(res) > 500:  # big banner e.g. mikrotik
+                            if any([x in res for x in ["#", "$", ">"]]) or len(res) > 500:  # big banner e.g. mikrotik
                                 if boolify(self.stop_on_success):
                                     running.clear()
 
