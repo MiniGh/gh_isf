@@ -1,4 +1,3 @@
-
 import os
 import sys
 import itertools
@@ -206,27 +205,31 @@ class IcssploitInterpreter(BaseInterpreter):
    | || |     \___ \\\___ \|  ___/| |   | |  | || |    | |   
   _| || |____ ____) |___) | |    | |___| |__| || |_   | |   
  |_____\_____|_____/_____/|_|    |______\____/_____|  |_|   
-                                                            
-                                                            
-				ICS Exploitation Framework
+
+
+
+
+                ICS Exploitation Framework
 
 Note     : ICSSPOLIT is fork from routersploit at 
-           https://github.com/reverse-shell/routersploit
+           https://github.com/reverse-shell/routersploit 
 Dev Team : wenzhe zhu(dark-lbp)
 Version  : 0.1.0
 
-Exploits: {exploits_count} Scanners: {scanners_count} Creds: {creds_count}
+Execution: {execution_count} Discovery: {discovery_count} Initial Access: {initial_access_count}
 
 ICS Exploits:
     PLC: {plc_exploit_count}          ICS Switch: {ics_switch_exploits_count}
     Software: {ics_software_exploits_count}
-""".format(exploits_count=self.modules_count['exploits'] + self.modules_count['extra_exploits'],
-           scanners_count=self.modules_count['scanners'] + self.modules_count['extra_scanners'],
-           creds_count=self.modules_count['creds'] + self.modules_count['extra_creds'],
-           plc_exploit_count=self.modules_count['plcs'],
-           ics_switch_exploits_count=self.modules_count['ics_switchs'],
-           ics_software_exploits_count=self.modules_count['ics_software']
-           )
+""".format(
+            execution_count=self.modules_count['execution'] + self.modules_count.get('extra_execution', 0),
+            discovery_count=self.modules_count['discovery'] + self.modules_count.get('extra_discovery', 0),
+            initial_access_count=self.modules_count['initial access'] + self.modules_count.get('extra_initial access',
+                                                                                               0),
+            plc_exploit_count=self.modules_count.get('plcs', 0),
+            ics_switch_exploits_count=self.modules_count.get('ics_switchs', 0),
+            ics_software_exploits_count=self.modules_count.get('ics_software', 0)
+        )
 
     def __parse_prompt(self):
         raw_prompt_default_template = "\001\033[4m\002{host}\001\033[0m\002 > "
@@ -235,7 +238,8 @@ ICS Exploits:
 
         module_prompt_default_template = "\001\033[4m\002{host}\001\033[0m\002 (\001\033[91m\002{module}\001\033[0m\002) > "
         module_prompt_template = os.getenv("ISF_MODULE_PROMPT", module_prompt_default_template).replace('\\033', '\033')
-        self.module_prompt_template = module_prompt_template if all([x in module_prompt_template for x in ['{host}', "{module}"]]) else module_prompt_default_template
+        self.module_prompt_template = module_prompt_template if all(
+            [x in module_prompt_template for x in ['{host}', "{module}"]]) else module_prompt_default_template
 
     @property
     def module_metadata(self):
@@ -251,7 +255,8 @@ ICS Exploits:
         """
         if self.current_module:
             try:
-                return self.module_prompt_template.format(host=self.prompt_hostname, module=self.module_metadata['name'])
+                return self.module_prompt_template.format(host=self.prompt_hostname,
+                                                          module=self.module_metadata['name'])
             except (AttributeError, KeyError):
                 return self.module_prompt_template.format(host=self.prompt_hostname, module="UnnamedModule")
         else:
@@ -453,14 +458,14 @@ ICS Exploits:
     def _show_all(self, *args, **kwargs):
         self.__show_modules()
 
-    def _show_scanners(self, *args, **kwargs):
-        self.__show_modules('scanners')
+    def _show_discovery(self, *args, **kwargs):
+        self.__show_modules('discovery')
 
-    def _show_exploits(self, *args, **kwargs):
-        self.__show_modules('exploits')
+    def _show_initial_access(self, *args, **kwargs):
+        self.__show_modules('initial access')
 
-    def _show_creds(self, *args, **kwargs):
-        self.__show_modules('creds')
+    def _show_execution(self, *args, **kwargs):
+        self.__show_modules('execution')
 
     def command_show(self, *args, **kwargs):
         sub_command = args[0]
